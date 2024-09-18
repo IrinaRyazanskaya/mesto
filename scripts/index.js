@@ -28,11 +28,11 @@ function createCard(cardData, onDelete) {
 };
 
 function renderCards(cardsData, onDelete) {
-  const cardsList = document.querySelector('.places__list');
+  const cardsContainer = document.querySelector('.places__list');
 
   cardsData.forEach(cardData => {
     const card = createCard(cardData, onDelete);
-    cardsList.append(card);
+    cardsContainer.append(card);
   });
 }
 
