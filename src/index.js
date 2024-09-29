@@ -1,7 +1,9 @@
 import './pages/index.css';
 import { initialCards } from './scripts/cards';
-import { openPopup, closePopup, fillEditForm, handleEditFormSubmit } from './scripts/modal';
+import { openPopup, closePopup, fillEditForm, handleEditFormSubmit, handleNewCardSubmit } from './scripts/modal';
 import { createCard, handleDelete } from './scripts/card';
+
+const cardsContainer = document.querySelector('.places__list');
 
 const addButton = document.querySelector('.profile__add-button');
 const editButton = document.querySelector('.profile__edit-button');
@@ -9,12 +11,12 @@ const editButton = document.querySelector('.profile__edit-button');
 const allPopups = document.querySelectorAll('.popup');
 const addPopup = document.querySelector('.popup_type_new-card');
 const editPopup = document.querySelector('.popup_type_edit');
+const newCardPopup = document.querySelector('.popup_type_new-card');
 
 const editFormElement = editPopup.querySelector('.popup__form');
+const newCardFormElement = newCardPopup.querySelector('.popup__form');
 
 function renderCards(cardsData, onDelete) {
-  const cardsContainer = document.querySelector('.places__list');
-
   cardsData.forEach(cardData => {
     const card = createCard(cardData, onDelete);
     cardsContainer.append(card);
@@ -45,3 +47,4 @@ allPopups.forEach(popup => {
 });  
 
 editFormElement.addEventListener('submit', handleEditFormSubmit); 
+newCardFormElement.addEventListener('submit', handleNewCardSubmit);
