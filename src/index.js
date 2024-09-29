@@ -9,6 +9,7 @@
 // @todo: Вывести карточки на страницу
 import './pages/index.css';
 import { initialCards } from './scripts/cards';
+import { initHandlers, openPopup, imagePopup, fillImagePopup } from './scripts/modal';
 
 function createCard(cardData, onDelete) {
   const cardTemplate = document.querySelector('#card-template').content;
@@ -24,6 +25,11 @@ function createCard(cardData, onDelete) {
 
   deleteButtonElement.addEventListener('click', () => {
     onDelete(cardElement);
+  });
+
+  imageElement.addEventListener('click', () => {
+    fillImagePopup(cardData);
+    openPopup(imagePopup);
   });
 
   return cardElement;
@@ -43,3 +49,5 @@ function handleDelete(cardElement) {
 }
 
 renderCards(initialCards, handleDelete);
+
+initHandlers();
