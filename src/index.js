@@ -1,39 +1,16 @@
-// @todo: Темплейт карточки
-
-// @todo: DOM узлы
-
-// @todo: Функция создания карточки
-
-// @todo: Функция удаления карточки
-
-// @todo: Вывести карточки на страницу
 import './pages/index.css';
 import { initialCards } from './scripts/cards';
-import { initHandlers, openPopup, imagePopup, fillImagePopup } from './scripts/modal';
+import { openPopup, closePopup, fillEditForm, handleEditFormSubmit } from './scripts/modal';
+import { createCard, handleDelete } from './scripts/card';
 
-function createCard(cardData, onDelete) {
-  const cardTemplate = document.querySelector('#card-template').content;
-  const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
+const addButton = document.querySelector('.profile__add-button');
+const editButton = document.querySelector('.profile__edit-button');
 
-  const imageElement = cardElement.querySelector('.card__image');
-  const titleElement = cardElement.querySelector('.card__title');
-  const deleteButtonElement = cardElement.querySelector('.card__delete-button');
+const allPopups = document.querySelectorAll('.popup');
+const addPopup = document.querySelector('.popup_type_new-card');
+const editPopup = document.querySelector('.popup_type_edit');
 
-  imageElement.src = cardData.link;
-  imageElement.alt = cardData.name;
-  titleElement.textContent = cardData.name;
-
-  deleteButtonElement.addEventListener('click', () => {
-    onDelete(cardElement);
-  });
-
-  imageElement.addEventListener('click', () => {
-    fillImagePopup(cardData);
-    openPopup(imagePopup);
-  });
-
-  return cardElement;
-};
+const editFormElement = editPopup.querySelector('.popup__form');
 
 function renderCards(cardsData, onDelete) {
   const cardsContainer = document.querySelector('.places__list');
@@ -44,10 +21,27 @@ function renderCards(cardsData, onDelete) {
   });
 }
 
-function handleDelete(cardElement) {
-  cardElement.remove();
-}
-
 renderCards(initialCards, handleDelete);
 
-initHandlers();
+editButton.addEventListener('click', () => {
+  fillEditForm();
+  openPopup(editPopup);
+});
+
+addButton.addEventListener('click', () => {
+  openPopup(addPopup);
+});
+
+allPopups.forEach(popup => {
+  popup.addEventListener('click', evt => {
+    if (evt.target.classList.contains('popup')) {
+      closePopup(popup);
+    }
+
+    if (evt.target.classList.contains('popup__close')) {
+      closePopup(popup);
+    }
+  });
+});  
+
+editFormElement.addEventListener('submit', handleEditFormSubmit); 
