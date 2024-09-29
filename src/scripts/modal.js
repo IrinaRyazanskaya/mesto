@@ -1,4 +1,4 @@
-import { createCard, handleDelete } from './card';
+import { createCard, deleteCard, toggleLike } from './card';
 
 const cardsContainer = document.querySelector('.places__list');
 
@@ -33,7 +33,7 @@ function handleNewCardSubmit(evt) {
   const name = titleInput.value;
   const link = linkInput.value;
 
-  const card = createCard({ name, link }, handleDelete);
+  const card = createCard({ name, link }, deleteCard, toggleLike);
   cardsContainer.prepend(card);
 
   titleInput.value = '';

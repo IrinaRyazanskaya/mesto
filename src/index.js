@@ -1,7 +1,7 @@
 import './pages/index.css';
 import { initialCards } from './scripts/cards';
 import { openPopup, closePopup, fillEditForm, handleEditFormSubmit, handleNewCardSubmit } from './scripts/modal';
-import { createCard, handleDelete } from './scripts/card';
+import { createCard, deleteCard, toggleLike } from './scripts/card';
 
 const cardsContainer = document.querySelector('.places__list');
 
@@ -16,14 +16,14 @@ const newCardPopup = document.querySelector('.popup_type_new-card');
 const editFormElement = editPopup.querySelector('.popup__form');
 const newCardFormElement = newCardPopup.querySelector('.popup__form');
 
-function renderCards(cardsData, onDelete) {
+function renderCards(cardsData) {
   cardsData.forEach(cardData => {
-    const card = createCard(cardData, onDelete);
+    const card = createCard(cardData, deleteCard, toggleLike);
     cardsContainer.append(card);
   });
 }
 
-renderCards(initialCards, handleDelete);
+renderCards(initialCards);
 
 editButton.addEventListener('click', () => {
   fillEditForm();
