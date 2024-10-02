@@ -1,11 +1,10 @@
-const allPopups = document.querySelectorAll('.popup');
-const imagePopup = document.querySelector('.popup_type_image');
-
 function escapeHandler(evt) {
   if (evt.key === 'Escape') {
-    allPopups.forEach(popup => {
-      closePopup(popup);
-    })
+    const openedPopup = document.querySelector('.popup_is-opened');
+    
+    if (openedPopup) {
+      closePopup(openedPopup);
+    }
   }
 }
 
@@ -19,18 +18,7 @@ function closePopup(popup) {
   document.removeEventListener('keydown', escapeHandler);
 }
 
-function fillImagePopup(cardData) {
-  const popupImage = imagePopup.querySelector('.popup__image');
-  const imageCaption = imagePopup.querySelector('.popup__caption');
-
-  popupImage.src = cardData.link;
-  popupImage.alt = cardData.name;
-  imageCaption.textContent = cardData.name;
-}
-
 export { 
   openPopup, 
   closePopup, 
-  imagePopup, 
-  fillImagePopup, 
 };
