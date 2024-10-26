@@ -2,6 +2,16 @@ import './pages/index.css';
 import { initialCards } from './scripts/cards';
 import { openPopup, closePopup } from './scripts/modal';
 import { createCard, deleteCard, toggleLike } from './scripts/card';
+import { enableValidation, clearValidation } from './scripts/validation';
+
+const formSettings = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
 
 const cardsContainer = document.querySelector('.places__list');
 
@@ -9,7 +19,6 @@ const addButton = document.querySelector('.profile__add-button');
 const editButton = document.querySelector('.profile__edit-button');
 
 const allPopups = document.querySelectorAll('.popup');
-const addPopup = document.querySelector('.popup_type_new-card');
 const editPopup = document.querySelector('.popup_type_edit');
 const newCardPopup = document.querySelector('.popup_type_new-card');
 const imagePopup = document.querySelector('.popup_type_image');
@@ -69,8 +78,9 @@ function handleNewCardSubmit(evt) {
   const card = createCard(cardData, deleteCard, toggleLike, imageClickHandler);
 
   closePopup(newCardPopup);
-  
+
   newCardFormElement.reset();
+  clearValidation(formSettings, newCardFormElement);
 
   cardsContainer.prepend(card);
 }
@@ -78,6 +88,7 @@ function handleNewCardSubmit(evt) {
 function fillEditForm() {
   nameInput.value = profileName.textContent;
   jobInput.value = profileDescription.textContent;
+  clearValidation(formSettings, editFormElement);
 }
 
 renderCards(initialCards);
@@ -88,7 +99,7 @@ editButton.addEventListener('click', () => {
 });
 
 addButton.addEventListener('click', () => {
-  openPopup(addPopup);
+  openPopup(newCardPopup);
 });
 
 allPopups.forEach(popup => {
@@ -105,3 +116,5 @@ allPopups.forEach(popup => {
 
 editFormElement.addEventListener('submit', handleEditFormSubmit); 
 newCardFormElement.addEventListener('submit', handleNewCardSubmit);
+
+enableValidation(formSettings); 
