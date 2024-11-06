@@ -4,7 +4,7 @@ function showInputError(settings, formElement, inputElement, errorMessage) {
   inputElement.classList.add(settings.inputErrorClass);
   errorElement.textContent = errorMessage;
   errorElement.classList.add(settings.errorClass);
-};
+}
 
 function hideInputError(settings, formElement, inputElement) {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
@@ -12,7 +12,7 @@ function hideInputError(settings, formElement, inputElement) {
   inputElement.classList.remove(settings.inputErrorClass);
   errorElement.classList.remove(settings.errorClass);
   errorElement.textContent = '';
-};
+}
 
 function clearValidation(settings, formElement) {
   const inputList = Array.from(formElement.querySelectorAll(settings.inputSelector));
@@ -20,7 +20,7 @@ function clearValidation(settings, formElement) {
 
   inputList.forEach(inputElement => hideInputError(settings, formElement, inputElement));
   buttonElement.classList.add(settings.inactiveButtonClass);
-};
+}
 
 function validateInput(inputElement) {
   if (inputElement.type === 'url') {
@@ -49,13 +49,13 @@ function checkInputValidity(settings, formElement, inputElement) {
   } else {
     hideInputError(settings, formElement, inputElement);
   }
-};
+}
 
 function hasInvalidInput(inputList) {
   return inputList.some((inputElement) => {
     return !inputElement.validity.valid;
   });
-};
+}
 
 function toggleButtonState(settings, inputList, buttonElement) {
   if (hasInvalidInput(inputList)) {
@@ -77,7 +77,7 @@ function setEventListeners(settings, formElement) {
       toggleButtonState(settings, inputList, buttonElement);
     });
   });
-};
+}
 
 function enableValidation(settings) {
   const formList = Array.from(document.querySelectorAll(settings.formSelector));
@@ -85,6 +85,6 @@ function enableValidation(settings) {
   formList.forEach((formElement) => {
     setEventListeners(settings, formElement);
   });
-};
+}
 
 export { enableValidation, clearValidation };
