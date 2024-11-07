@@ -19,33 +19,24 @@ function clearValidation(settings, formElement) {
   const buttonElement = formElement.querySelector(settings.submitButtonSelector);
 
   inputList.forEach(inputElement => hideInputError(settings, formElement, inputElement));
-  buttonElement.classList.add(settings.inactiveButtonClass);
+  deactivateButton(buttonElement, settings);
 }
 
 function validateInput(inputElement) {
-  if (inputElement.type === 'url') {
-    return;
+  if (inputElement.validity.patternMismatch) {
+    return inputElement.getAttribute('data-error-message');
   }
 
-  if (inputElement.value === '') {
-    return;
-  }
-
-  const regex = /^[a-zA-Zа-яА-ЯёЁ\s\-]+$/;
-  const errorMessage = inputElement.getAttribute('data-error-message');
-
-  if (!regex.test(inputElement.value)) {
-    inputElement.setCustomValidity(errorMessage);
-  } else {
-    inputElement.setCustomValidity('');
+  if (!inputElement.validity.valid) {
+    return inputElement.validationMessage;
   }
 }
 
 function checkInputValidity(settings, formElement, inputElement) {
-  validateInput(inputElement);
-
+  const errorMessage = validateInput(inputElement);
+  
   if (!inputElement.validity.valid) {
-    showInputError(settings, formElement, inputElement, inputElement.validationMessage);
+    showInputError(settings, formElement, inputElement, errorMessage);
   } else {
     hideInputError(settings, formElement, inputElement);
   }
@@ -57,11 +48,17 @@ function hasInvalidInput(inputList) {
   });
 }
 
+function deactivateButton(buttonElement, settings) {
+  buttonElement.classList.add(settings.inactiveButtonClass);
+  buttonElement.disabled = true;
+}
+
 function toggleButtonState(settings, inputList, buttonElement) {
   if (hasInvalidInput(inputList)) {
-    buttonElement.classList.add(settings.inactiveButtonClass);
+    deactivateButton(buttonElement, settings);
   } else {
     buttonElement.classList.remove(settings.inactiveButtonClass);
+    buttonElement.disabled = false;
   }
 }
 
@@ -87,4 +84,4 @@ function enableValidation(settings) {
   });
 }
 
-export { enableValidation, clearValidation };
+export { enableValidation, clearValidation, deactivateButton };

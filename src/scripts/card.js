@@ -1,9 +1,7 @@
-import { openPopup, closePopup } from "./modal";
-import { config, deleteCardRequest, putLikeRequest, deleteLikeRequest } from "./api";
-
-const cardTemplate = document.querySelector('#card-template').content;
+import { deleteCardRequest, putLikeRequest, deleteLikeRequest } from "./api";
 
 function createCard(cardData, currentUserID, onDelete, onLike, onImageClick) {
+  const cardTemplate = document.querySelector('#card-template').content;
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
 
   const imageElement = cardElement.querySelector('.card__image');
@@ -11,9 +9,6 @@ function createCard(cardData, currentUserID, onDelete, onLike, onImageClick) {
   const deleteButtonElement = cardElement.querySelector('.card__delete-button');
   const likeButtonElement = cardElement.querySelector('.card__like-button');
   const likeCounterElement = cardElement.querySelector('.card__like-counter');
-
-  const confirmDeletePopup = document.querySelector('.popup_type_confirm-delete');
-  const confirmDeleteButton = confirmDeletePopup.querySelector('.popup__button');
 
   const likes = cardData.likes;
 
@@ -34,26 +29,15 @@ function createCard(cardData, currentUserID, onDelete, onLike, onImageClick) {
     }
   });
 
-  deleteButtonElement.addEventListener('click', () => {
-    openPopup(confirmDeletePopup);
-
-    confirmDeleteButton.onclick = () => {
-      onDelete(cardElement, cardData._id);
-      closePopup(confirmDeletePopup);
-    };
-  });
-
-  likeButtonElement.addEventListener('click', () => {
-    onLike(likeButtonElement, likeCounterElement, cardData._id);
-  });
-  
+  deleteButtonElement.addEventListener('click', () => onDelete(cardElement, cardData._id));
+  likeButtonElement.addEventListener('click', () => onLike(likeButtonElement, likeCounterElement, cardData._id));
   imageElement.addEventListener('click', onImageClick);
 
   return cardElement;
 };
 
 function deleteCard(cardElement, cardId) {
-  deleteCardRequest(config, cardId)
+  return deleteCardRequest(cardId)
     .then(() => {
       cardElement.remove();
     })
@@ -64,7 +48,7 @@ function deleteCard(cardElement, cardId) {
 
 function toggleLike(likeButton, likeCounter, cardId) {
   if (likeButton.classList.contains('card__like-button_is-active')) {
-    deleteLikeRequest(config, cardId)
+    deleteLikeRequest(cardId)
       .then((cardData) => {
         likeCounter.textContent = cardData.likes.length;
         likeButton.classList.remove('card__like-button_is-active');
@@ -73,7 +57,7 @@ function toggleLike(likeButton, likeCounter, cardId) {
         console.error(error);
       })
   } else {
-    putLikeRequest(config, cardId)
+    putLikeRequest(cardId)
       .then((cardData) => {
         likeCounter.textContent = cardData.likes.length;
         likeButton.classList.add('card__like-button_is-active');

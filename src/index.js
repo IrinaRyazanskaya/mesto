@@ -1,9 +1,8 @@
 import './pages/index.css';
 import { openPopup, closePopup } from './scripts/modal';
 import { createCard, deleteCard, toggleLike } from './scripts/card';
-import { enableValidation, clearValidation } from './scripts/validation';
+import { enableValidation, clearValidation, deactivateButton } from './scripts/validation';
 import { 
-  config, 
   getUserInformationRequest, 
   getInitialCardsRequest, 
   updateUserInfoRequest, 
@@ -55,6 +54,9 @@ const changeAvatarFormElement = changeAvatarPopup.querySelector('.popup__form');
 const avatarLinkInput = changeAvatarFormElement.querySelector('.popup__input_type_url');
 const saveButtonAvatarForm = changeAvatarFormElement.querySelector('.popup__button');
 
+const confirmDeletePopup = document.querySelector('.popup_type_confirm-delete');
+const confirmDeleteButton = confirmDeletePopup.querySelector('.popup__button');
+
 function fillImagePopup(cardData) {
   popupImage.src = cardData.link;
   popupImage.alt = cardData.name;
@@ -70,8 +72,13 @@ function openImagePopup(cardData) {
 
 function renderCards(cardsData) {
   cardsData.forEach(cardData => {
-    const imageClickHandler = openImagePopup(cardData);
-    const card = createCard(cardData, currentUserID, deleteCard, toggleLike, imageClickHandler);
+    const card = createCard(
+      cardData, 
+      currentUserID, 
+      handleDeleteCard,
+      toggleLike, 
+      openImagePopup(cardData)
+    );
     cardsContainer.append(card);
   });
 }
@@ -79,10 +86,9 @@ function renderCards(cardsData) {
 function handleEditFormSubmit(evt) {
   evt.preventDefault();
   saveButtonEditForm.textContent = 'Сохранение...';
-  saveButtonEditForm.classList.add('popup__button_disabled');
+  deactivateButton(saveButtonEditForm, formSettings);
 
   updateUserInfoRequest(
-    config,
     nameInput.value,
     jobInput.value
   )
@@ -93,7 +99,6 @@ function handleEditFormSubmit(evt) {
       closePopup(editPopup);
     })
     .catch((error) => {
-      saveButtonEditForm.classList.remove('popup__button_disabled');
       console.error(error);
     })
     .finally(() => {
@@ -104,16 +109,20 @@ function handleEditFormSubmit(evt) {
 function handleNewCardSubmit(evt) {
   evt.preventDefault();
   saveButtonAddForm.textContent = 'Сохранение...';
-  saveButtonAddForm.classList.add('popup__button_disabled');
+  deactivateButton(saveButtonAddForm, formSettings);
 
   addNewCardRequest(
-    config,
     titleInput.value,
     linkInput.value
   )
     .then((cardData) => {
-      const imageClickHandler = openImagePopup(cardData);
-      const card = createCard(cardData, currentUserID, deleteCard, toggleLike, imageClickHandler);
+      const card = createCard(
+        cardData, 
+        currentUserID, 
+        handleDeleteCard, 
+        toggleLike, 
+        openImagePopup(cardData)
+      );
 
       closePopup(newCardPopup);
 
@@ -123,7 +132,6 @@ function handleNewCardSubmit(evt) {
       cardsContainer.prepend(card);
     })
     .catch((error) => {
-      saveButtonAddForm.classList.remove('popup__button_disabled');
       console.error(error);
     })
     .finally(() => {
@@ -134,10 +142,9 @@ function handleNewCardSubmit(evt) {
 function handleChangeAvatarSubmit(evt) {
   evt.preventDefault();
   saveButtonAvatarForm.textContent = 'Сохранение...';
-  saveButtonAvatarForm.classList.add('popup__button_disabled');
+  deactivateButton(saveButtonAvatarForm, formSettings);
 
   updateAvatarRequest(
-    config,
     avatarLinkInput.value
   )
     .then((data) => {
@@ -149,12 +156,25 @@ function handleChangeAvatarSubmit(evt) {
       clearValidation(formSettings, changeAvatarFormElement);
     })
     .catch((error) => {
-      saveButtonAvatarForm.classList.remove('popup__button_disabled');
       console.error(error);
     })
     .finally(() => {
       saveButtonAvatarForm.textContent = 'Сохранить';
     });
+}
+
+function handleDeleteCard(cardElement, cardId) {
+  openPopup(confirmDeletePopup);
+
+  confirmDeleteButton.onclick = () => {
+    deleteCard(cardElement, cardId)
+      .then(() => {
+        closePopup(confirmDeletePopup);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 }
 
 function fillEditForm() {
@@ -200,11 +220,8 @@ changeAvatarFormElement.addEventListener('submit', handleChangeAvatarSubmit);
 
 enableValidation(formSettings); 
 
-Promise.all([getUserInformationRequest(config), getInitialCardsRequest(config)])
-  .then((responses) => {
-    const profileResponse = responses[0];
-    const cardsResponse = responses[1];
-
+Promise.all([getUserInformationRequest(), getInitialCardsRequest()])
+  .then(([profileResponse, cardsResponse]) => {
     currentUserID = profileResponse._id;
 
     renderUserInformation(profileResponse);
