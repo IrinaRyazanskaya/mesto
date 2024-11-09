@@ -8,6 +8,7 @@ import {
   updateUserInfoRequest, 
   addNewCardRequest,
   updateAvatarRequest,
+  deleteCardRequest,
 } from './scripts/api';
 
 let currentUserID = null;
@@ -167,8 +168,9 @@ function handleDeleteCard(cardElement, cardId) {
   openPopup(confirmDeletePopup);
 
   confirmDeleteButton.onclick = () => {
-    deleteCard(cardElement, cardId)
+    deleteCardRequest(cardId)
       .then(() => {
+        deleteCard(cardElement);
         closePopup(confirmDeletePopup);
       })
       .catch((error) => {

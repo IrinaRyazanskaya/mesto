@@ -1,4 +1,4 @@
-import { deleteCardRequest, putLikeRequest, deleteLikeRequest } from "./api";
+import { putLikeRequest, deleteLikeRequest } from "./api";
 
 function createCard(cardData, currentUserID, onDelete, onLike, onImageClick) {
   const cardTemplate = document.querySelector('#card-template').content;
@@ -36,14 +36,8 @@ function createCard(cardData, currentUserID, onDelete, onLike, onImageClick) {
   return cardElement;
 };
 
-function deleteCard(cardElement, cardId) {
-  return deleteCardRequest(cardId)
-    .then(() => {
-      cardElement.remove();
-    })
-    .catch((error) => {
-      console.error(error);
-    })
+function deleteCard(cardElement) {
+  cardElement.remove();
 }
 
 function toggleLike(likeButton, likeCounter, cardId) {
