@@ -1,15 +1,12 @@
 const presets = [
-  ['@babel/preset-env', { 
-    targets: {
-      edge: '17',
-      ie: '11',
-      firefox: '50',
-      chrome: '64',
-      safari: '11.1'
+  [
+    "@babel/preset-env",
+    {
+      corejs: 3,
+      useBuiltIns: "entry",
+      targets: ">0.2%, not dead, not op_mini all, not ie <= 11",
     },
-
-    useBuiltIns: "entry"
-  }]
+  ],
 ];
 
 module.exports = { presets };

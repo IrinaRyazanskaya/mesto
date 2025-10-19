@@ -11,20 +11,20 @@ function hideInputError(settings, formElement, inputElement) {
 
   inputElement.classList.remove(settings.inputErrorClass);
   errorElement.classList.remove(settings.errorClass);
-  errorElement.textContent = '';
+  errorElement.textContent = "";
 }
 
 function clearValidation(settings, formElement) {
   const inputList = Array.from(formElement.querySelectorAll(settings.inputSelector));
   const buttonElement = formElement.querySelector(settings.submitButtonSelector);
 
-  inputList.forEach(inputElement => hideInputError(settings, formElement, inputElement));
+  inputList.forEach((inputElement) => hideInputError(settings, formElement, inputElement));
   deactivateButton(buttonElement, settings);
 }
 
 function validateInput(inputElement) {
   if (inputElement.validity.patternMismatch) {
-    return inputElement.getAttribute('data-error-message');
+    return inputElement.getAttribute("data-error-message");
   }
 
   if (!inputElement.validity.valid) {
@@ -34,7 +34,7 @@ function validateInput(inputElement) {
 
 function checkInputValidity(settings, formElement, inputElement) {
   const errorMessage = validateInput(inputElement);
-  
+
   if (!inputElement.validity.valid) {
     showInputError(settings, formElement, inputElement, errorMessage);
   } else {
@@ -69,7 +69,7 @@ function setEventListeners(settings, formElement) {
   toggleButtonState(settings, inputList, buttonElement);
 
   inputList.forEach((inputElement) => {
-    inputElement.addEventListener('input', function () {
+    inputElement.addEventListener("input", function () {
       checkInputValidity(settings, formElement, inputElement);
       toggleButtonState(settings, inputList, buttonElement);
     });
