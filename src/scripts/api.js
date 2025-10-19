@@ -1,9 +1,9 @@
 const config = {
-  baseUrl: 'https://nomoreparties.co/v1/pwff-cohort-1',
+  baseUrl: "https://nomoreparties.co/v1/pwff-cohort-1",
   headers: {
-    authorization: 'ae2e6766-97db-4f08-b0fd-1ef973641b71',
-    'Content-Type': 'application/json'
-  }
+    authorization: "ae2e6766-97db-4f08-b0fd-1ef973641b71",
+    "Content-Type": "application/json",
+  },
 };
 
 function checkResponse(res) {
@@ -11,121 +11,113 @@ function checkResponse(res) {
     return res.json();
   }
   return Promise.reject(`Ошибка ${res.status}`);
-} 
+}
 
 function getUserInformationRequest() {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: {
-      authorization: config.headers.authorization
-    }
-  })
-    .then((res) => {
-      return checkResponse(res);
-    });
+      authorization: config.headers.authorization,
+    },
+  }).then((res) => {
+    return checkResponse(res);
+  });
 }
 
 function getInitialCardsRequest() {
   return fetch(`${config.baseUrl}/cards`, {
     headers: {
-      authorization: config.headers.authorization
-    }
-  })
-    .then((res) => {
-      return checkResponse(res);
-    });
+      authorization: config.headers.authorization,
+    },
+  }).then((res) => {
+    return checkResponse(res);
+  });
 }
 
 function updateUserInfoRequest(name, about) {
   return fetch(`${config.baseUrl}/users/me`, {
-    method: 'PATCH',
+    method: "PATCH",
     headers: {
       authorization: config.headers.authorization,
-      'Content-Type': config.headers['Content-Type']
+      "Content-Type": config.headers["Content-Type"],
     },
     body: JSON.stringify({
       name,
-      about
-    })
-  })
-    .then((res) => {
-      return checkResponse(res);
-    });
+      about,
+    }),
+  }).then((res) => {
+    return checkResponse(res);
+  });
 }
 
 function addNewCardRequest(name, link) {
   return fetch(`${config.baseUrl}/cards`, {
-    method: 'POST',
+    method: "POST",
     headers: {
       authorization: config.headers.authorization,
-      'Content-Type': config.headers['Content-Type']
+      "Content-Type": config.headers["Content-Type"],
     },
     body: JSON.stringify({
       name,
-      link
-    })
-  })
-    .then((res) => {
-      return checkResponse(res);
-    });
+      link,
+    }),
+  }).then((res) => {
+    return checkResponse(res);
+  });
 }
 
 function deleteCardRequest(cardId) {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
-    method: 'DELETE',
+    method: "DELETE",
     headers: {
-      authorization: config.headers.authorization
-    }
-  })
-    .then((res) => {
-      return checkResponse(res);
-    });
+      authorization: config.headers.authorization,
+    },
+  }).then((res) => {
+    return checkResponse(res);
+  });
 }
 
 function putLikeRequest(cardId) {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      authorization: config.headers.authorization
-    }
-  })
-    .then((res) => {
-      return checkResponse(res);
-    });
+      authorization: config.headers.authorization,
+    },
+  }).then((res) => {
+    return checkResponse(res);
+  });
 }
 
 function deleteLikeRequest(cardId) {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: 'DELETE',
+    method: "DELETE",
     headers: {
-      authorization: config.headers.authorization
-    }
-  })
-    .then((res) => {
-      return checkResponse(res);
-    });
+      authorization: config.headers.authorization,
+    },
+  }).then((res) => {
+    return checkResponse(res);
+  });
 }
 
 function updateAvatarRequest(avatar) {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
-    method: 'PATCH',
+    method: "PATCH",
     headers: {
       authorization: config.headers.authorization,
-      'Content-Type': config.headers['Content-Type']
+      "Content-Type": config.headers["Content-Type"],
     },
     body: JSON.stringify({
-      avatar
-    })
-  })
-    .then((res) => {
-      return checkResponse(res);
-    })
+      avatar,
+    }),
+  }).then((res) => {
+    return checkResponse(res);
+  });
 }
 
-export { 
-  getUserInformationRequest, 
-  getInitialCardsRequest, 
-  updateUserInfoRequest, 
-  addNewCardRequest, 
+export {
+  getUserInformationRequest,
+  getInitialCardsRequest,
+  updateUserInfoRequest,
+  addNewCardRequest,
   deleteCardRequest,
   putLikeRequest,
   deleteLikeRequest,
