@@ -26,8 +26,8 @@
 2. Склонируйте репозиторий и перейдите в директорию проекта:
 
    ```bash
-   git clone https://github.com/IrinaRyazanskaya/mesto-old
-   cd mesto-old
+   git clone https://github.com/IrinaRyazanskaya/mesto
+   cd mesto
    ```
 
 3. Установите зависимости:
